@@ -1,6 +1,10 @@
+<p align="center">
+    <img src="res/logo.png">
+</p>
+
 # Data Visualization Tool
 
-![Project Logo](res/logo.png)
+#### Version 1.0
 
 ## Table of Contents
 - [Introduction](#introduction)
@@ -45,6 +49,9 @@ cd dataviz-tool
 venv\Scripts\activate
 # On macOS/Linux
 source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
 ```
 
 ## Usage

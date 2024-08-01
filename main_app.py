@@ -120,8 +120,13 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 plt.xlabel(self.lineXTitle.text())
                 plt.ylabel(self.lineYTitle.text())
                 plt.title(f'{x_col} vs Selected Columns')
-                # plt.legend()
-                # plt.grid(True)
+
+                if self.legendCheck.isChecked():
+                    plt.legend()
+
+                if self.gridCheck.isChecked():
+                    plt.grid(True)
+
                 plt.show()
                 self.update_statusbar("Plot generated successfully")
             except Exception as e:

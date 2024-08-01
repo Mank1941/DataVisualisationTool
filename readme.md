@@ -10,8 +10,6 @@
 - [Installation](#installation)
 - [Usage](#usage)
 - [Configuration](#configuration)
-- [Contributing](#contributing)
-- [License](#license)
 - [Contact](#contact)
 - [Acknowledgements](#acknowledgements)
 
@@ -81,9 +79,6 @@ matplotlib
 pyqt5
 openpyxl
 ```
-
-## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Contact
 For any questions or inquiries, please contact:

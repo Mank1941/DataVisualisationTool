@@ -4,8 +4,6 @@
 
 # Data Visualization Tool
 
-#### Version 1.0
-
 ## Table of Contents
 - [Introduction](#introduction)
 - [Features](#features)

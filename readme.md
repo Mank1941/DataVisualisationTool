@@ -35,10 +35,49 @@ Follow these steps to set up the project:
 
 ```sh
 # Clone the repository
-git clone https://github.com/yourusername/dataviz-tool.git
+git clone https://github.com/Mank1941/DataVisualisationTool dataviz-tool
 
 # Navigate to the project directory
 cd dataviz-tool
 
-# Install dependencies
-pip install -r requirements.txt
+# Activate the virtual environment
+# On Windows
+venv\Scripts\activate
+# On macOS/Linux
+source venv/bin/activate
+```
+
+## Usage
+With the virtual environment activated, you can run the application using:
+```sh
+python main.py
+```
+
+1. **Load Data**: Click on "Add File" to select and load an Excel file.
+2. **Manage Columns**: Use the "Add", "Remove", and "Clear" buttons to manage columns.
+3. **Configure Plot**: Select columns for the X and Y axes and set axis titles.
+4. **Plot Data**: Click "PLOT!" to generate and view the plot.
+
+## Configuration
+The application configuration is minimal and primarily handled through the graphical user interface. Ensure that the `requirements.txt` file includes all necessary dependencies:
+
+```txt
+pandas
+matplotlib
+pyqt5
+openpyxl
+```
+
+## License
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Contact
+For any questions or inquiries, please contact:
+- **Project Lead**: Prosper Manyele - [your.email@example.com]
+
+## Acknowledgements
+- **PyQt5**: For providing the graphical user interface framework.
+- **pandas**: For data manipulation and analysis.
+- **matplotlib**: For plotting and data visualization.
+- **Excel**: For the file format used in data input.
+

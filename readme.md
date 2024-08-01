@@ -33,6 +33,12 @@ Describe the steps required to install and set up your project.
 Ensure you have the following prerequisites installed:
 - Python 3.x
 - pip (Python package installer)
+- virtualenv
+
+  On cmd type:
+  ```sh
+  pip install virtualenv
+  ```
 
 ### Installation Steps
 Follow these steps to set up the project:
@@ -43,6 +49,9 @@ git clone https://github.com/Mank1941/DataVisualisationTool dataviz-tool
 
 # Navigate to the project directory
 cd dataviz-tool
+
+# create the virtual environment
+python -m venv venv
 
 # Activate the virtual environment
 # On Windows

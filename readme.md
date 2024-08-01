@@ -38,7 +38,7 @@ Ensure you have the following prerequisites installed:
 Follow these steps to set up the project:
 
 ```sh
-# Clone the repository
+# Clone the repository  Or Download project to a directory
 git clone https://github.com/Mank1941/DataVisualisationTool dataviz-tool
 
 # Navigate to the project directory

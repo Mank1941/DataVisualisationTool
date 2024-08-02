@@ -23,7 +23,7 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>11</x>
@@ -56,6 +56,16 @@
         </widget>
        </item>
       </layout>
+     </item>
+     <item>
+      <widget class="QLabel" name="XAxisLabel">
+       <property name="text">
+        <string>Y-Axis Data</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -120,7 +130,7 @@
        <item>
         <widget class="QLabel" name="labelXAxis">
          <property name="text">
-          <string>X-Axis</string>
+          <string>X-Axis Data</string>
          </property>
         </widget>
        </item>
@@ -138,7 +148,7 @@
        <item>
         <widget class="QLabel" name="labelXTitle">
          <property name="text">
-          <string>X-Axis</string>
+          <string>X-Axis Title</string>
          </property>
         </widget>
        </item>
@@ -156,7 +166,7 @@
        <item>
         <widget class="QLabel" name="labelYTitle">
          <property name="text">
-          <string>Y-Axis</string>
+          <string>Y-Axis Title</string>
          </property>
         </widget>
        </item>
@@ -201,6 +211,30 @@
         </item>
        </layout>
       </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_6">
+       <item>
+        <widget class="QLabel" name="plotTitleLabel">
+         <property name="text">
+          <string>Plot Title</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="plotTitle">
+         <property name="text">
+          <string>Plot Title</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
       <widget class="QPushButton" name="plotButton">

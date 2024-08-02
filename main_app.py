@@ -109,6 +109,7 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def plot_graph(self):
         x_col = self.dropdownXAxis.currentText()
         y_cols = [self.listColumns_2.model().item(row).text() for row in range(self.listColumns_2.model().rowCount())]
+        title = self.plotTitle.text()
 
         if x_col and y_cols and self.df is not None:
             try:
@@ -119,7 +120,7 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
                 plt.xlabel(self.lineXTitle.text())
                 plt.ylabel(self.lineYTitle.text())
-                plt.title(f'{x_col} vs Selected Columns')
+                plt.title(title)
 
                 if self.legendCheck.isChecked():
                     plt.legend()

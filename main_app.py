@@ -28,7 +28,7 @@ class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def load_file(self):
         options = QtWidgets.QFileDialog.Options()
         file_path, _ = QtWidgets.QFileDialog.getOpenFileName(
-            self, "Select Excel File", "", "Excel Files (*.xlsx);;All Files (*)", options=options)
+            self, "Select Excel File", "", "Excel Files (*.xlsx , *.csv);;All Files (*)", options=options)
 
         if file_path:
             filename = os.path.basename(file_path)

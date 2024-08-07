@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'res\main.ui'
+# Form implementation generated from reading ui file 'res/main.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.11
 #
@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(450, 550)
+        MainWindow.resize(521, 568)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
@@ -24,10 +24,10 @@ class Ui_MainWindow(object):
         self.centralwidget.setSizePolicy(sizePolicy)
         self.centralwidget.setObjectName("centralwidget")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(11, 11, 401, 491))
+        self.layoutWidget.setGeometry(QtCore.QRect(11, 11, 501, 534))
         self.layoutWidget.setObjectName("layoutWidget")
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.layoutWidget)
-        self.verticalLayout_4.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
+        self.verticalLayout_4.setSizeConstraint(QtWidgets.QLayout.SetMaximumSize)
         self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
@@ -45,12 +45,13 @@ class Ui_MainWindow(object):
         self.XAxisLabel.setObjectName("XAxisLabel")
         self.verticalLayout_4.addWidget(self.XAxisLabel)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setContentsMargins(6, -1, 6, -1)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.listColumns = QtWidgets.QListView(self.layoutWidget)
         self.listColumns.setEnabled(True)
         self.listColumns.setAutoFillBackground(False)
         self.listColumns.setEditTriggers(QtWidgets.QAbstractItemView.EditKeyPressed)
-        self.listColumns.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
+        self.listColumns.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
         self.listColumns.setObjectName("listColumns")
         self.horizontalLayout_2.addWidget(self.listColumns)
         self.verticalLayout_3 = QtWidgets.QVBoxLayout()
@@ -68,7 +69,7 @@ class Ui_MainWindow(object):
         self.listColumns_2 = QtWidgets.QListView(self.layoutWidget)
         self.listColumns_2.setEnabled(True)
         self.listColumns_2.setEditTriggers(QtWidgets.QAbstractItemView.EditKeyPressed)
-        self.listColumns_2.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
+        self.listColumns_2.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
         self.listColumns_2.setObjectName("listColumns_2")
         self.horizontalLayout_2.addWidget(self.listColumns_2)
         self.verticalLayout_4.addLayout(self.horizontalLayout_2)
@@ -116,17 +117,10 @@ class Ui_MainWindow(object):
         self.label.setObjectName("label")
         self.displayForm.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label)
         self.verticalLayout_4.addWidget(self.displayGroup)
-        self.verticalLayout_6 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_6.setObjectName("verticalLayout_6")
-        self.plotTitleLabel = QtWidgets.QLabel(self.layoutWidget)
-        self.plotTitleLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.plotTitleLabel.setObjectName("plotTitleLabel")
-        self.verticalLayout_6.addWidget(self.plotTitleLabel)
         self.plotTitle = QtWidgets.QLineEdit(self.layoutWidget)
         self.plotTitle.setAlignment(QtCore.Qt.AlignCenter)
         self.plotTitle.setObjectName("plotTitle")
-        self.verticalLayout_6.addWidget(self.plotTitle)
-        self.verticalLayout_4.addLayout(self.verticalLayout_6)
+        self.verticalLayout_4.addWidget(self.plotTitle)
         self.plotButton = QtWidgets.QPushButton(self.layoutWidget)
         self.plotButton.setObjectName("plotButton")
         self.verticalLayout_4.addWidget(self.plotButton)
@@ -157,7 +151,6 @@ class Ui_MainWindow(object):
         self.legendCheck.setText(_translate("MainWindow", "Legend"))
         self.gridCheck.setText(_translate("MainWindow", "Grid"))
         self.label.setText(_translate("MainWindow", "Display"))
-        self.plotTitleLabel.setText(_translate("MainWindow", "Plot Title"))
         self.plotTitle.setText(_translate("MainWindow", "Plot Title"))
         self.plotButton.setText(_translate("MainWindow", "PLOT!"))
         self.actionAdd_Datasheet.setText(_translate("MainWindow", "Add Datasheet"))

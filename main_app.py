@@ -1,136 +1,167 @@
 # main_app.py
-
-import sys
+import tkinter as tk
+from tkinter import messagebox, filedialog
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import pandas as pd
 import os
-import matplotlib.pyplot as plt
-from PyQt5 import QtGui, QtWidgets
-from main_ui import Ui_MainWindow
-import data_handler  # Import the data handler module
+import data_handler
+from main_ui import MainWindow
+from plot_widget import PlotWidget
 
-class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
-    def __init__(self, parent=None):
-        super(MainApp, self).__init__(parent)
-        self.setupUi(self)
-        self.addFileButton.clicked.connect(self.load_file)
-        self.plotButton.clicked.connect(self.plot_graph)
-        self.addButton.clicked.connect(self.add_column)
-        self.removeButton.clicked.connect(self.remove_column)
-        self.clearButton.clicked.connect(self.clear_columns)
+class MainApp(MainWindow):
+    def __init__(self,):
+        super().__init__()
         self.df = None
+        self.plot_window = None
+        self.plot_widget = None  # Reference to PlotWidget instance
+        self.bind_buttons()
 
-        # Initialize models
-        self.listColumns.setModel(QtGui.QStandardItemModel())
-        self.listColumns_2.setModel(QtGui.QStandardItemModel())
+    def bind_buttons(self):
+        self.add_file_button.config(command=self.add_file)
+        self.add_button.config(command=self.add_item)
+        self.remove_button.config(command=self.remove_item)
+        self.clear_button.config(command=self.clear_items)
+        self.plot_button.config(command=self.open_plot_window)
 
-    def update_statusbar(self, text):
-        self.statusBar.showMessage(text, 5000)
-
-    def load_file(self):
-        options = QtWidgets.QFileDialog.Options()
-        file_path, _ = QtWidgets.QFileDialog.getOpenFileName(
-            self, "Select Excel File", "", "Excel Files (*.xlsx , *.csv);;All Files (*)", options=options)
-
+    def add_file(self):
+        # File dialog to select Excel or CSV files
+        file_path = filedialog.askopenfilename(
+            filetypes=[("Data files", "*.xlsx;*.xls;*.csv"), ("All files", "*")],
+            title="Select a Data File"
+        )
         if file_path:
             filename = os.path.basename(file_path)
-            self.fileName.setText(filename)
+            self.file_name_var.set(filename)
             self.load_data(file_path)
+        else:
+            messagebox.showwarning("File Selection", "No file selected or unsupported file type.")
 
+    def update_status_bar(self, message):
+        # Update the status bar with the given message
+        self.status_bar_var.set(message)
+    #
     def load_data(self, file_path):
         self.df, error = data_handler.load_excel(file_path)
         if self.df is not None:
             self.update_list_view()
             self.update_dropdowns()
-            self.update_statusbar("File loaded successfully")
+            self.update_status_bar("File loaded successfully")
         else:
-            self.update_statusbar(f"Error: {error}")
+            self.update_status_bar(f"Error: {error}")
 
     def update_dropdowns(self):
-        self.dropdownXAxis.clear()
-        column_names = data_handler.get_column_names(self.df)
-        if column_names:
-            for col in column_names:
-                self.dropdownXAxis.addItem(col)
+        # Clear existing items in the Combobox
+        self.dropdown_x_axis['values'] = []
 
+        # Get column names from the DataFrame using the data_handler
+        column_names = data_handler.get_column_names(self.df)
+
+        # Add new items to the Combobox
+        if column_names:
+            self.dropdown_x_axis['values'] = column_names
+
+        # Optionally, set the first item as the current selection
+        if column_names:
+            self.dropdown_x_axis.set(column_names[0])
+
+        self.update_status_bar("Dropdown updated with column names.")
+    #
     def update_list_view(self):
-        model = QtGui.QStandardItemModel()
+        # Clear existing items in the listbox
+        self.list_columns.delete(0, tk.END)
+
+        # Get column names from the DataFrame using the data_handler
         column_names = data_handler.get_column_names(self.df)
+
+        # Add new items to the listbox
         if column_names:
             for col in column_names:
-                item = QtGui.QStandardItem(col)
-                model.appendRow(item)
-        self.listColumns.setModel(model)
+                self.list_columns.insert(tk.END, col)
 
-    def add_column(self):
-        selected_items = self.listColumns.selectedIndexes()
-        list_columns_model = self.listColumns.model()
-        list_columns_2_model = self.listColumns_2.model()
+        self.update_status_bar("List updated with column names.")
 
-        if list_columns_2_model is None:
-            list_columns_2_model = QtGui.QStandardItemModel()
-            self.listColumns_2.setModel(list_columns_2_model)
+    def add_item(self):
+        selected_indices = self.list_columns.curselection()
+        existing_items = self.list_columns_2.get(0, tk.END)
 
-        if list_columns_model:
-            for item in selected_items:
-                column_name = item.data()
-                # Add to listColumns_2 if not already present
-                existing_items = [list_columns_2_model.item(i).text() for i in range(list_columns_2_model.rowCount())]
-                if column_name not in existing_items:
-                    list_columns_2_model.appendRow(QtGui.QStandardItem(column_name))
+        if not existing_items:
+            existing_items = []
 
-                # Remove the item from listColumns
-                list_columns_model.removeRow(item.row())
+        for index in reversed(selected_indices):  # Reversed to handle deletion while iterating
+            column_name = self.list_columns.get(index)
+
+            # Add to list_columns_2 if not already present
+            if column_name not in existing_items:
+                self.list_columns_2.insert(tk.END, column_name)
+
+            # Remove the item from list_columns
+            self.list_columns.delete(index)
 
         self.update_dropdowns()  # Update dropdowns after adding columns
 
-    def remove_column(self):
-        selected_items = self.listColumns_2.selectedIndexes()
-        list_columns_model = self.listColumns.model()
-        list_columns_2_model = self.listColumns_2.model()
+        # Update status bar
+        self.update_status_bar("Item(s) added to second list and removed from first list.")
 
-        if list_columns_model and list_columns_2_model:
-            for index in selected_items:
-                column_name = index.data()
-                list_columns_2_model.removeRow(index.row())
+    def remove_item(self):
+        selected_indices = self.list_columns_2.curselection()
 
-                # Add the removed item back to listColumns
-                item = QtGui.QStandardItem(column_name)
-                item.setSelectable(True)  # Ensure items are selectable
-                list_columns_model.appendRow(item)
+        # Collect the selected items to add back later
+        items_to_add = []
+
+        for index in reversed(selected_indices):  # Reversed to handle deletion while iterating
+            column_name = self.list_columns_2.get(index)
+            items_to_add.append(column_name)
+
+            # Remove the item from list_columns_2
+            self.list_columns_2.delete(index)
+
+        # Add removed items back to list_columns
+        for item in items_to_add:
+            if item not in self.list_columns.get(0, tk.END):
+                self.list_columns.insert(tk.END, item)
 
         self.update_dropdowns()  # Update dropdowns after removing columns
 
-    def clear_columns(self):
-        list_columns_2_model = self.listColumns_2.model()
-        if list_columns_2_model:
-            list_columns_2_model.removeRows(0, list_columns_2_model.rowCount())
+        # Update status bar
+        self.update_status_bar("Item(s) removed from second list and added back to first list.")
+
+    def clear_items(self):
+        # Clear all items from list_columns_2
+        self.list_columns_2.delete(0, tk.END)
+
+        # Update the list view and dropdowns
         self.update_list_view()
         self.update_dropdowns()  # Refresh dropdowns
 
-    def plot_graph(self):
-        x_col = self.dropdownXAxis.currentText()
-        y_cols = [self.listColumns_2.model().item(row).text() for row in range(self.listColumns_2.model().rowCount())]
-        title = self.plotTitle.text()
+        # Update status bar
+        self.update_status_bar("All items cleared from the second list.")
 
-        if x_col and y_cols and self.df is not None:
-            try:
-                plt.figure(figsize=(10, 6))
-                for y_col in y_cols:
-                    y = self.df[y_col]
-                    plt.plot(self.df[x_col], y, label=y_col)
+    def open_plot_window(self):
+        if self.plot_window is None or not self.plot_window.winfo_exists():
+            # Create a new Toplevel window for the plot
+            self.plot_window = tk.Toplevel(self)
+            self.plot_window.title("Plot")
+            self.plot_window.geometry("800x600")  # Set the size of the plot window
 
-                plt.xlabel(self.lineXTitle.text())
-                plt.ylabel(self.lineYTitle.text())
-                plt.title(title)
-
-                if self.legendCheck.isChecked():
-                    plt.legend()
-
-                if self.gridCheck.isChecked():
-                    plt.grid(True)
-
-                plt.show()
-                self.update_statusbar("Plot generated successfully")
-            except Exception as e:
-                self.update_statusbar(f"Error: {str(e)}")
+            # Initialize PlotWidget in the new Toplevel window
+            self.plot_widget = PlotWidget(self.plot_window)
         else:
-            self.update_statusbar("Please select valid columns for X and Y axes.")
+            # If the plot window already exists, bring it to the front
+            self.plot_window.lift()
+
+        # Get the required data from the main window
+        x_col = self.dropdown_x_axis.get()
+        y_cols = [self.list_columns_2.get(i) for i in range(self.list_columns_2.size())]
+        title = self.plot_title.get()
+        x_title = self.line_x_title.get()
+        y_title = self.line_y_title.get()
+        legend = self.legend_var.get()
+        grid = self.grid_var.get()
+
+        if self.plot_widget is not None:
+            self.plot_widget.plot_graph(x_col, y_cols, title, self.df, x_title, y_title, legend, grid)
+
+if __name__ == "__main__":
+    app = MainApp()
+    app.mainloop()

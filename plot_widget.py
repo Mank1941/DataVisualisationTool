@@ -31,11 +31,13 @@ class PlotWidget:
 
                 for y_col in y_cols:
                     y = df[y_col].values
-                    line, = self.ax.plot(x, y, label=y_col, linewidth=2)
+                    color = self.parent.line_colors.get(y_col, None)  # Fetch color if available
+                    line, = self.ax.plot(x, y, label=y_col, linewidth=2,
+                                         color=color or 'blue')  # Use default color if none is selected
 
                     # Add labels at the start and end points of each line
                     # self.ax.text(x[0], y[0], f'{y_col} Start', color=line.get_color(), ha='right', va='center')
-                    self.ax.text(x[-1], y[-1], y_col, color=line.get_color(), va='center')
+                    # self.ax.text(x[-1], y[-1], y_col, color=line.get_color(), va='center')
 
                 self.ax.set_xlabel(x_title)
                 self.ax.set_ylabel(y_title)
@@ -52,5 +54,4 @@ class PlotWidget:
                 message = f"Error: {str(e)}"
                 # self.parent.update_status_bar(message)
                 print(message)
-        # else:
-        #     self.parent.update_status_bar("Please select valid columns for X and Y axes.")
+

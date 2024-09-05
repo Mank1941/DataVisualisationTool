@@ -1,6 +1,6 @@
 # main_ui.py
 import tkinter as tk
-from tkinter import ttk, filedialog, Listbox, StringVar
+from tkinter import ttk, filedialog, Listbox, StringVar, colorchooser
 from plot_widget import PlotWidget
 
 class MainWindow(tk.Tk):
@@ -88,8 +88,14 @@ class MainWindow(tk.Tk):
         self.plot_title = tk.Entry(self.centralwidget, justify="center")
         self.plot_title.insert(0, "Plot Title")
         self.plot_title.grid(row=7, column=0, pady=5, padx=10, sticky="ew")
+
+        # Button to select line colors
+        self.color_button = tk.Button(self.centralwidget, text="Select Line Colors", command=self.select_colors)
+        self.color_button.grid(row=8, column=0, pady=5, padx=10)
+
         self.plot_button = tk.Button(self.centralwidget, text="PLOT!")
-        self.plot_button.grid(row=8, column=0, pady=5, padx=10)
+        self.plot_button.grid(row=9, column=0, pady=5, padx=10)
+
 
         # Status bar setup
         self.status_bar_var = tk.StringVar()
@@ -101,6 +107,15 @@ class MainWindow(tk.Tk):
 
     # def update_status_bar(self, message):
     #     self.status_bar_var.set(message)
+    def select_colors(self):
+        # Method to select colors for each line
+        selected_indices = self.list_columns_2.curselection()
+        for index in selected_indices:
+            y_col = self.list_columns_2.get(index)
+            color = colorchooser.askcolor(title=f"Choose color for {y_col}")[1]  # Opens color chooser
+            if color:
+                self.line_colors[y_col] = color
+        self.status_bar_var.set("Colors selected for lines.")
 
 if __name__ == "__main__":
     app = MainWindow()

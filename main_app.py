@@ -1,6 +1,6 @@
 # main_app.py
 import tkinter as tk
-from tkinter import messagebox, filedialog
+from tkinter import messagebox, filedialog, colorchooser
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import pandas as pd
@@ -15,6 +15,7 @@ class MainApp(MainWindow):
         self.df = None
         self.plot_window = None
         self.plot_widget = None  # Reference to PlotWidget instance
+        self.line_colors = {}  # Dictionary to store line colors
         self.bind_buttons()
 
     def bind_buttons(self):
@@ -23,6 +24,16 @@ class MainApp(MainWindow):
         self.remove_button.config(command=self.remove_item)
         self.clear_button.config(command=self.clear_items)
         self.plot_button.config(command=self.open_plot_window)
+        self.color_button.config(command=self.select_colors)  # Button to select colors for lines
+
+    def select_colors(self):
+        selected_indices = self.list_columns_2.curselection()
+        for index in selected_indices:
+            y_col = self.list_columns_2.get(index)
+            color = colorchooser.askcolor(title=f"Choose color for {y_col}")[1]  # Opens color chooser
+            if color:
+                self.line_colors[y_col] = color
+        self.update_status_bar("Colors selected for lines.")
 
     def add_file(self):
         # File dialog to select Excel or CSV files
@@ -138,21 +149,26 @@ class MainApp(MainWindow):
         self.update_status_bar("All items cleared from the second list.")
 
     def open_plot_window(self):
-        if self.plot_window is None or not self.plot_window.winfo_exists():
-            # Create a new Toplevel window for the plot
-            self.plot_window = tk.Toplevel(self)
-            self.plot_window.title("Plot")
-            self.plot_window.geometry("800x600")  # Set the size of the plot window
+        if self.df is None or self.df.empty:  # Properly checking if the DataFrame is None or empty
+            self.update_status_bar("No data loaded. Please load a file first.")
+            return
 
-            # Initialize PlotWidget in the new Toplevel window
-            self.plot_widget = PlotWidget(self.plot_window)
-        else:
-            # If the plot window already exists, bring it to the front
-            self.plot_window.lift()
-
-        # Get the required data from the main window
         x_col = self.dropdown_x_axis.get()
         y_cols = [self.list_columns_2.get(i) for i in range(self.list_columns_2.size())]
+
+        if not x_col or not y_cols:
+            self.update_status_bar("Please select valid columns for X and Y axes.")
+            return
+
+        # Proceed with opening plot window and plotting
+        if self.plot_window is None or not self.plot_window.winfo_exists():
+            self.plot_window = tk.Toplevel(self)
+            self.plot_window.title("Plot")
+            self.plot_window.geometry("800x600")
+            self.plot_widget = PlotWidget(self.plot_window)
+        else:
+            self.plot_window.lift()
+
         title = self.plot_title.get()
         x_title = self.line_x_title.get()
         y_title = self.line_y_title.get()
@@ -161,6 +177,8 @@ class MainApp(MainWindow):
 
         if self.plot_widget is not None:
             self.plot_widget.plot_graph(x_col, y_cols, title, self.df, x_title, y_title, legend, grid)
+            self.update_status_bar("Plot generated successfully.")
+
 
 if __name__ == "__main__":
     app = MainApp()
